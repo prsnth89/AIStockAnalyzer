@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.ticker }} - Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 32px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .metric {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        
+        .recommendation {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .recommendation.strong-buy { background: #48bb78; color: white; }
+        .recommendation.buy { background: #68d391; color: white; }
+        .recommendation.hold { background: #ecc94b; color: #2d3748; }
+        .recommendation.sell { background: #fc8181; color: white; }
+        .recommendation.strong-sell { background: #f56565; color: white; }
+        
+        .price-bands {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: #2d3748;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .financial-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .card .value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .card .subtext {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .card-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-purple { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .card-orange { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .card-green { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        
+        .checkbox-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .select-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .select-buttons button {
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .select-buttons button:hover {
+            background: #5568d3;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f7fafc;
+        }
+        
+        .positive { color: #48bb78; font-weight: bold; }
+        .negative { color: #f56565; font-weight: bold; }
+        
+        .region-chart, .segment-chart {
+            margin: 10px 0;
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .chart-label {
+            width: 120px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .chart-bar-container {
+            flex: 1;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: width 0.5s ease;
+        }
+        
+        .buffett-analysis {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 3px solid #f6ad55;
+        }
+        
+        .buffett-header {
+            font-size: 26px;
+            color: #744210;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .buffett-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #744210;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .buffett-verdict {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            color: #744210;
+            margin: 15px 0;
+        }
+        
+        .buffett-reasons, .buffett-warnings {
+            margin: 15px 0;
+        }
+        
+        .buffett-reasons ul, .buffett-warnings ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .buffett-reasons li, .buffett-warnings li {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.6);
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .disclaimer {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .financial-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ data.ticker }} - {{ data.company_name }}</h1>
+            <div class="price">${{ data.current_price }}</div>
+        </div>
+        
+        <div class="metric">
+            <strong>Fair Value Estimate:</strong> ${{ data.fair_value }}
+        </div>
+        <div class="metric">
+            <strong>P/E Ratio:</strong> {{ data.pe_ratio }}
+        </div>
+        
+        <div class="recommendation {{ data.recommendation.lower().replace(' ', '-') }}">
+            Recommendation: {{ data.recommendation }}
+        </div>
+        
+        <div class="price-bands">
+            <h3 class="section-title">📊 Valuation Bands</h3>
+            <p><strong>Strong Buy:</strong> Below ${{ data.strong_buy }}</p>
+            <p><strong>Buy:</strong> ${{ data.buy }} - ${{ data.fair_value }}</p>
+            <p><strong>Hold:</strong> ${{ data.fair_value }} - ${{ data.sell }}</p>
+            <p><strong>Sell:</strong> ${{ data.sell }} - ${{ data.strong_sell }}</p>
+            <p><strong>Strong Sell:</strong> Above ${{ data.strong_sell }}</p>
+        </div>
+        
+        <h3 class="section-title">📏 Position Sizing (for $10,000 portfolio)</h3>
+        <p>Suggested allocation: 5% = $500</p>
+        <p>Shares to buy: ~{{ (500 / data.current_price) | round(0) }} shares</p>
+        <p>Stop loss: ${{ data.buy }} (-15% risk tolerance)</p>
+        
+        {% if data.has_financials %}
+        
+        <!-- Financial Health Cards -->
+        <h3 class="section-title">💰 Financial Health Overview</h3>
+        <div class="financial-cards">
+            <div class="card card-blue">
+                <h3>Annual Revenue</h3>
+                <div class="value">${{ data.yearly[0].revenue }}B</div>
+                <div class="subtext">YoY: {% if data.yearly[0].revenue_growth >= 0 %}+{% endif %}{{ data.yearly[0].revenue_growth }}%</div>
+            </div>
+            <div class="card card-purple">
+                <h3>Net Profit Margin</h3>
+                <div class="value">{{ data.yearly[0].net_margin }}%</div>
+                <div class="subtext">Industry avg: ~20%</div>
+            </div>
+            <div class="card card-orange">
+                <h3>Total Debt</h3>
+                <div class="value">${{ data.debt }}B</div>
+                <div class="subtext">Debt/Equity: {{ data.debt_to_equity }}</div>
+            </div>
+            <div class="card card-green">
+                <h3>Cash Reserves</h3>
+                <div class="value">${{ data.cash }}B</div>
+                <div class="subtext">Strong liquidity position</div>
+            </div>
+        </div>
+        
+        <!-- Valuation Metrics Table -->
+        <h3 class="section-title">📈 Key Valuation Metrics</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                    <th>Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>P/E Ratio</strong></td>
+                    <td>{{ data.pe_ratio }}</td>
+                    <td>{% if data.pe_ratio < 20 %}Undervalued{% elif data.pe_ratio < 30 %}Fair{% else %}Expensive{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>Forward P/E</strong></td>
+                    <td>{{ data.forward_pe or 'N/A' }}</td>
+                    <td>{% if data.forward_pe and data.forward_pe < data.pe_ratio %}Improving{% else %}Stable{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>Industry P/E</strong></td>
+                    <td>{{ data.industry_pe or 'N/A' }}</td>
+                    <td>{% if data.pe_ratio < data.industry_pe %}Below sector avg{% else %}Above sector avg{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>PEG Ratio</strong></td>
+                    <td>{{ data.peg or 'N/A' }}</td>
+                    <td>{% if data.peg and data.peg < 1.5 %}Good value{% elif data.peg and data.peg < 2.5 %}Fair{% else %}Expensive{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>Market Cap</strong></td>
+                    <td>${{ data.market_cap }}B</td>
+                    <td>{% if data.market_cap > 1000 %}Mega-cap{% elif data.market_cap > 200 %}Large-cap{% else %}Mid-cap{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>Debt Amount</strong></td>
+                    <td>${{ data.debt }}B</td>
+                    <td>{% if data.debt < 50 %}Low{% elif data.debt < 150 %}Moderate{% else %}High{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>Debt/Equity Ratio</strong></td>
+                    <td>{{ data.debt_to_equity }}</td>
+                    <td>{% if data.debt_to_equity < 0.5 %}Conservative{% elif data.debt_to_equity < 1.5 %}Moderate{% else %}Aggressive{% endif %}</td>
+                </tr>
+                <tr>
+                    <td><strong>Book Value</strong></td>
+                    <td>${{ data.book_value or 'N/A' }}</td>
+                    <td>Per share equity value</td>
+                </tr>
+                <tr>
+                    <td><strong>P/B Ratio</strong></td>
+                    <td>{{ data.pb_ratio or 'N/A' }}</td>
+                    <td>{% if data.pb_ratio and data.pb_ratio < 3 %}Undervalued{% elif data.pb_ratio and data.pb_ratio < 10 %}Fair{% else %}Premium{% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Warren Buffett Analysis -->
+        {% if data.buffett_analysis %}
+        <div class="buffett-analysis">
+            <div class="buffett-header">
+                🎩 Warren Buffett / Charlie Munger Investment Analysis
+            </div>
+            
+            <div class="buffett-score">
+                Score: {{ data.buffett_analysis.score }}/100
+            </div>
+            
+            <div class="buffett-verdict">
+                {{ data.buffett_analysis.verdict }}
+            </div>
+            
+            <p style="text-align: center; color: #744210; margin-top: 10px;">
+                <strong>Confidence:</strong> {{ data.buffett_analysis.confidence }}
+            </p>
+            
+            {% if data.buffett_analysis.reasons %}
+            <div class="buffett-reasons">
+                <h4 style="color: #744210; margin-bottom: 10px;">✅ Positive Factors (Value Investing Principles):</h4>
+                <ul>
+                    {% for reason in data.buffett_analysis.reasons %}
+                    <li>{{ reason }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            {% if data.buffett_analysis.warnings %}
+            <div class="buffett-warnings">
+                <h4 style="color: #c53030; margin-bottom: 10px;">⚠️ Risk Factors / Concerns:</h4>
+                <ul>
+                    {% for warning in data.buffett_analysis.warnings %}
+                    <li style="background: rgba(252, 129, 129, 0.2);">{{ warning }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <p style="margin-top: 20px; font-size: 13px; color: #744210; font-style: italic;">
+                <strong>Buffett's Philosophy:</strong> "Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1." 
+                This analysis evaluates consistent profitability, low debt, cash strength, and valuation margin of safety.
+            </p>
+        </div>
+        {% endif %}
+        
+        <!-- Interactive Bar Chart - Moved to top -->
+        <h3 class="section-title">📊 Interactive Financial Trends Chart</h3>
+        <div class="checkbox-container">
+            <h4 style="margin-bottom: 10px;">Select Metrics to Display:</h4>
+            <div class="checkbox-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="chart-revenue" value="revenue" checked onchange="updateChart()">
+                    <label for="chart-revenue">Revenue ($B)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="chart-gross-profit" value="gross_profit" onchange="updateChart()">
+                    <label for="chart-gross-profit">Gross Profit ($B)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="chart-net-profit" value="net_profit" checked onchange="updateChart()">
+                    <label for="chart-net-profit">Net Profit ($B)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="chart-debt" value="debt" checked onchange="updateChart()">
+                    <label for="chart-debt">Debt ($B)</label>
+                </div>
+            </div>
+            <div class="select-buttons" style="margin-top: 15px;">
+                <button onclick="setChartPeriod('quarterly')">Show Quarterly Data</button>
+                <button onclick="setChartPeriod('yearly')" style="background: #764ba2;">Show Yearly Data</button>
+            </div>
+        </div>
+        
+        <div id="chart-container" style="margin: 30px 0; padding: 20px; background: #f7fafc; border-radius: 10px;">
+            <canvas id="financialChart" style="max-height: 450px; width: 100%;"></canvas>
+        </div>
+        
+        <!-- Revenue & Profitability Analysis -->
+        <h3 class="section-title">📊 Revenue & Profitability Analysis</h3>
+        
+        <!-- Quarterly Checkboxes -->
+        <div class="checkbox-container">
+            <h4 style="margin-bottom: 10px;">📅 Select Quarters (Past 10 Years):</h4>
+            <div class="select-buttons">
+                <button onclick="selectAllQuarters()">Select All</button>
+                <button onclick="deselectAllQuarters()">Deselect All</button>
+                <button onclick="selectRecentQuarters(4)">Recent 4</button>
+                <button onclick="selectRecentQuarters(8)">Recent 8</button>
+            </div>
+            <div class="checkbox-grid" id="quarterly-checkboxes">
+                {% for q in data.quarterly %}
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q-{{ loop.index }}" value="{{ loop.index }}" 
+                           {% if loop.index <= 4 %}checked{% endif %} onchange="updateQuarterlyTable()">
+                    <label for="q-{{ loop.index }}">{{ q.period }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Quarterly Data Table -->
+        <div id="quarterly-data-table">
+            <table id="quarterly-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Revenue ($B)</th>
+                        <th>Rev Growth %</th>
+                        <th>Gross Profit ($B)</th>
+                        <th>Gross Margin %</th>
+                        <th>Net Profit ($B)</th>
+                        <th>Net Margin %</th>
+                        <th>Net Profit Growth %</th>
+                        <th>Debt ($B)</th>
+                        <th>Debt Growth %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in data.quarterly %}
+                    <tr class="quarter-row" data-index="{{ loop.index }}" style="{% if loop.index > 4 %}display: none;{% endif %}">
+                        <td><strong>{{ q.period }}</strong></td>
+                        <td>${{ q.revenue }}</td>
+                        <td class="{% if q.revenue_growth >= 0 %}positive{% else %}negative{% endif %}">
+                            {% if q.revenue_growth >= 0 %}+{% endif %}{{ q.revenue_growth }}%
+                        </td>
+                        <td>${{ q.gross_profit }}</td>
+                        <td>{{ q.gross_margin }}%</td>
+                        <td>${{ q.net_profit }}</td>
+                        <td>{{ q.net_margin }}%</td>
+                        <td class="{% if q.net_profit_growth >= 0 %}positive{% else %}negative{% endif %}">
+                            {% if q.net_profit_growth >= 0 %}+{% endif %}{{ q.net_profit_growth }}%
+                        </td>
+                        <td>${{ q.debt }}</td>
+                        <td class="{% if q.debt_growth >= 0 %}positive{% else %}negative{% endif %}">
+                            {% if q.debt_growth >= 0 %}+{% endif %}{{ q.debt_growth }}%
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Yearly Checkboxes -->
+        <div class="checkbox-container" style="margin-top: 30px;">
+            <h4 style="margin-bottom: 10px;">📆 Select Years (Past 10 Years):</h4>
+            <div class="select-buttons">
+                <button onclick="selectAllYears()">Select All</button>
+                <button onclick="deselectAllYears()">Deselect All</button>
+                <button onclick="selectRecentYears(4)">Recent 4</button>
+                <button onclick="selectRecentYears(7)">Recent 7</button>
+            </div>
+            <div class="checkbox-grid" id="yearly-checkboxes">
+                {% for y in data.yearly %}
+                <div class="checkbox-item">
+                    <input type="checkbox" id="y-{{ loop.index }}" value="{{ loop.index }}" 
+                           {% if loop.index <= 4 %}checked{% endif %} onchange="updateYearlyTable()">
+                    <label for="y-{{ loop.index }}">{{ y.period }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Yearly Data Table -->
+        <div id="yearly-data-table">
+            <table id="yearly-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Revenue ($B)</th>
+                        <th>Rev Growth %</th>
+                        <th>Gross Profit ($B)</th>
+                        <th>Gross Margin %</th>
+                        <th>Net Profit ($B)</th>
+                        <th>Net Margin %</th>
+                        <th>Net Profit Growth %</th>
+                        <th>Debt ($B)</th>
+                        <th>Debt Growth %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for y in data.yearly %}
+                    <tr class="year-row" data-index="{{ loop.index }}" style="{% if loop.index > 4 %}display: none;{% endif %}">
+                        <td><strong>{{ y.period }}</strong></td>
+                        <td>${{ y.revenue }}</td>
+                        <td class="{% if y.revenue_growth >= 0 %}positive{% else %}negative{% endif %}">
+                            {% if y.revenue_growth >= 0 %}+{% endif %}{{ y.revenue_growth }}%
+                        </td>
+                        <td>${{ y.gross_profit }}</td>
+                        <td>{{ y.gross_margin }}%</td>
+                        <td>${{ y.net_profit }}</td>
+                        <td>{{ y.net_margin }}%</td>
+                        <td class="{% if y.net_profit_growth >= 0 %}positive{% else %}negative{% endif %}">
+                            {% if y.net_profit_growth >= 0 %}+{% endif %}{{ y.net_profit_growth }}%
+                        </td>
+                        <td>${{ y.debt }}</td>
+                        <td class="{% if y.debt_growth >= 0 %}positive{% else %}negative{% endif %}">
+                            {% if y.debt_growth >= 0 %}+{% endif %}{{ y.debt_growth }}%
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Geographic Revenue Breakdown -->
+        {% if data.regions %}
+        <h3 class="section-title">🌍 Worldwide Revenue by Region</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+            <div class="region-chart">
+                {% for region in data.regions %}
+                <div class="chart-bar">
+                    <div class="chart-label">{{ region.name }}</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: {{ region.percent }}%">
+                            ${{ region.revenue }}B ({{ region.percent }}%)
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 10px;">
+                <canvas id="regionPieChart" style="max-height: 350px;"></canvas>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Business Segments -->
+        {% if data.segments %}
+        <h3 class="section-title">💰 Core Income Streams (Business Segments)</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+            <div class="segment-chart">
+                {% for segment in data.segments %}
+                <div class="chart-bar">
+                    <div class="chart-label">{{ segment.name }}</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: {{ segment.percent }}%">
+                            ${{ segment.revenue }}B ({{ segment.percent }}%)
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 10px;">
+                <canvas id="segmentPieChart" style="max-height: 350px;"></canvas>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% endif %}
+        
+        <div class="disclaimer">
+            <strong>⚠️ DISCLAIMER:</strong> For research and education only. Not personalized investment advice.
+            Data source: Demonstration data (mock). Past performance ≠ future results. 
+            Consult a licensed financial advisor before making investment decisions.
+        </div>
+        
+        <a href="/" class="back-link">← Analyze another stock</a>
+    </div>
+    
+    <script>
+        // Quarterly checkbox functions
+        function selectAllQuarters() {
+            document.querySelectorAll('#quarterly-checkboxes input[type="checkbox"]').forEach(cb => {
+                cb.checked = true;
+            });
+            updateQuarterlyTable();
+        }
+        
+        function deselectAllQuarters() {
+            document.querySelectorAll('#quarterly-checkboxes input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            updateQuarterlyTable();
+        }
+        
+        function selectRecentQuarters(count) {
+            const checkboxes = document.querySelectorAll('#quarterly-checkboxes input[type="checkbox"]');
+            checkboxes.forEach((cb, index) => {
+                cb.checked = index < count;
+            });
+            updateQuarterlyTable();
+        }
+        
+        function updateQuarterlyTable() {
+            const checkboxes = document.querySelectorAll('#quarterly-checkboxes input[type="checkbox"]');
+            const rows = document.querySelectorAll('.quarter-row');
+            
+            rows.forEach((row, index) => {
+                const checkbox = checkboxes[index];
+                if (checkbox && checkbox.checked) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // Yearly checkbox functions
+        function selectAllYears() {
+            document.querySelectorAll('#yearly-checkboxes input[type="checkbox"]').forEach(cb => {
+                cb.checked = true;
+            });
+            updateYearlyTable();
+        }
+        
+        function deselectAllYears() {
+            document.querySelectorAll('#yearly-checkboxes input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            updateYearlyTable();
+        }
+        
+        function selectRecentYears(count) {
+            const checkboxes = document.querySelectorAll('#yearly-checkboxes input[type="checkbox"]');
+            checkboxes.forEach((cb, index) => {
+                cb.checked = index < count;
+            });
+            updateYearlyTable();
+        }
+        
+        function updateYearlyTable() {
+            const checkboxes = document.querySelectorAll('#yearly-checkboxes input[type="checkbox"]');
+            const rows = document.querySelectorAll('.year-row');
+            
+            rows.forEach((row, index) => {
+                const checkbox = checkboxes[index];
+                if (checkbox && checkbox.checked) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    
+    <!-- Load Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        // Store financial data from backend
+        const quarterlyData = {{ data.quarterly | tojson }};
+        const yearlyData = {{ data.yearly | tojson }};
+        
+        let currentChartPeriod = 'yearly';
+        let financialChart = null;
+        
+        // Chart functions
+        function initChart() {
+            const ctx = document.getElementById('financialChart');
+            if (!ctx) {
+                console.error('Canvas element not found');
+                return;
+            }
+            
+            try {
+                financialChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [],
+                        datasets: []
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Financial Trends - Yearly Data',
+                                font: { size: 18, weight: 'bold' }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': $' + context.parsed.y + 'B';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Amount ($B)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Period'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                updateChart();
+            } catch (error) {
+                console.error('Error initializing chart:', error);
+            }
+        }
+        
+        function setChartPeriod(period) {
+            currentChartPeriod = period;
+            updateChart();
+        }
+        
+        function updateChart() {
+            if (!financialChart) {
+                console.error('Chart not initialized');
+                return;
+            }
+            
+            try {
+                const data = currentChartPeriod === 'quarterly' ? quarterlyData : yearlyData;
+                const selectedMetrics = getSelectedChartMetrics();
+                
+                if (selectedMetrics.length === 0) {
+                    financialChart.data.labels = [];
+                    financialChart.data.datasets = [];
+                    financialChart.update();
+                    return;
+                }
+                
+                // Get periods (labels) - reverse to show oldest to newest
+                const labels = data.map(d => d.period).reverse();
+                
+                // Build datasets for selected metrics
+                const datasets = [];
+                const colors = {
+                    revenue: { bg: 'rgba(102, 126, 234, 0.8)', border: 'rgba(102, 126, 234, 1)' },
+                    gross_profit: { bg: 'rgba(118, 75, 162, 0.8)', border: 'rgba(118, 75, 162, 1)' },
+                    net_profit: { bg: 'rgba(72, 187, 120, 0.8)', border: 'rgba(72, 187, 120, 1)' },
+                    debt: { bg: 'rgba(245, 101, 101, 0.8)', border: 'rgba(245, 101, 101, 1)' }
+                };
+                
+                const labels_map = {
+                    revenue: 'Revenue',
+                    gross_profit: 'Gross Profit',
+                    net_profit: 'Net Profit',
+                    debt: 'Debt'
+                };
+                
+                selectedMetrics.forEach(metric => {
+                    datasets.push({
+                        label: labels_map[metric],
+                        data: data.map(d => d[metric]).reverse(),
+                        backgroundColor: colors[metric].bg,
+                        borderColor: colors[metric].border,
+                        borderWidth: 2
+                    });
+                });
+                
+                // Update chart
+                financialChart.data.labels = labels;
+                financialChart.data.datasets = datasets;
+                financialChart.options.plugins.title.text = 
+                    'Financial Trends - ' + (currentChartPeriod === 'quarterly' ? 'Quarterly' : 'Yearly') + ' Data';
+                financialChart.update();
+            } catch (error) {
+                console.error('Error updating chart:', error);
+            }
+        }
+        
+        function getSelectedChartMetrics() {
+            const metrics = [];
+            document.querySelectorAll('#chart-revenue, #chart-gross-profit, #chart-net-profit, #chart-debt').forEach(cb => {
+                if (cb.checked) {
+                    metrics.push(cb.value);
+                }
+            });
+            return metrics;
+        }
+        
+        // Initialize pie charts for regions and segments
+        function initPieCharts() {
+            // Region Pie Chart
+            const regionCanvas = document.getElementById('regionPieChart');
+            if (regionCanvas) {
+                const regionData = {{ data.regions | tojson | safe }};
+                const regionLabels = regionData.map(r => r.name);
+                const regionValues = regionData.map(r => r.revenue);
+                const regionColors = [
+                    'rgba(102, 126, 234, 0.8)',
+                    'rgba(118, 75, 162, 0.8)',
+                    'rgba(72, 187, 120, 0.8)',
+                    'rgba(245, 101, 101, 0.8)',
+                    'rgba(251, 191, 36, 0.8)'
+                ];
+                
+                new Chart(regionCanvas, {
+                    type: 'pie',
+                    data: {
+                        labels: regionLabels,
+                        datasets: [{
+                            data: regionValues,
+                            backgroundColor: regionColors,
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Revenue by Region',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percent = ((value / total) * 100).toFixed(1);
+                                        return label + ': $' + value + 'B (' + percent + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Segment Pie Chart
+            const segmentCanvas = document.getElementById('segmentPieChart');
+            if (segmentCanvas) {
+                const segmentData = {{ data.segments | tojson | safe }};
+                const segmentLabels = segmentData.map(s => s.name);
+                const segmentValues = segmentData.map(s => s.revenue);
+                const segmentColors = [
+                    'rgba(99, 102, 241, 0.8)',
+                    'rgba(236, 72, 153, 0.8)',
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(251, 146, 60, 0.8)',
+                    'rgba(168, 85, 247, 0.8)'
+                ];
+                
+                new Chart(segmentCanvas, {
+                    type: 'pie',
+                    data: {
+                        labels: segmentLabels,
+                        datasets: [{
+                            data: segmentValues,
+                            backgroundColor: segmentColors,
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Revenue by Business Segment',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percent = ((value / total) * 100).toFixed(1);
+                                        return label + ': $' + value + 'B (' + percent + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            updateQuarterlyTable();
+            updateYearlyTable();
+            
+            // Initialize chart after DOM is ready and Chart.js is loaded
+            if (typeof Chart !== 'undefined') {
+                initChart();
+                initPieCharts();
+            } else {
+                console.error('Chart.js library not loaded');
+            }
+        });
+    </script>
+</body>
+</html>
