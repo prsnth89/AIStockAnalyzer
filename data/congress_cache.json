@@ -1,0 +1,280 @@
+{
+  "timestamp": "2026-05-07T10:35:20.493489",
+  "trades": [
+    {
+      "ticker": "NVDA",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "John Boozman",
+      "party": "R",
+      "chamber": "Senate",
+      "filed_date": "Apr 14, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "11.55%"
+    },
+    {
+      "ticker": "MSFT",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "John Boozman",
+      "party": "R",
+      "chamber": "Senate",
+      "filed_date": "Apr 14, 2026",
+      "trade_date": "Mar 5, 2026",
+      "excess_return": "0.14%"
+    },
+    {
+      "ticker": "MSFT",
+      "trade_type": "Purchase",
+      "amount": "$500,001 - $1,000,000",
+      "politician": "Josh Gottheimer",
+      "party": "D",
+      "chamber": "House",
+      "filed_date": "Apr 8, 2026",
+      "trade_date": "Mar 25, 2026",
+      "excess_return": "7.66%"
+    },
+    {
+      "ticker": "MSFT",
+      "trade_type": "Purchase",
+      "amount": "$50,001 - $100,000",
+      "politician": "Josh Gottheimer",
+      "party": "D",
+      "chamber": "House",
+      "filed_date": "Apr 8, 2026",
+      "trade_date": "Mar 25, 2026",
+      "excess_return": "7.66%"
+    },
+    {
+      "ticker": "BA",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "6.85%"
+    },
+    {
+      "ticker": "BA",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "6.85%"
+    },
+    {
+      "ticker": "C",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "9.17%"
+    },
+    {
+      "ticker": "C",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "9.17%"
+    },
+    {
+      "ticker": "GS",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "6.63%"
+    },
+    {
+      "ticker": "GS",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "6.63%"
+    },
+    {
+      "ticker": "GLW",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "7.18%"
+    },
+    {
+      "ticker": "CSCO",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "2.81%"
+    },
+    {
+      "ticker": "AMGN",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 24, 2026",
+      "excess_return": "-11.16%"
+    },
+    {
+      "ticker": "PTON",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "21.73%"
+    },
+    {
+      "ticker": "URI",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 25, 2026",
+      "excess_return": "20.75%"
+    },
+    {
+      "ticker": "FDX",
+      "trade_type": "Purchase",
+      "amount": "$15,001 - $50,000",
+      "politician": "Maria Elvira Salazar",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 21, 2026",
+      "trade_date": "Mar 19, 2026",
+      "excess_return": "1.75%"
+    },
+    {
+      "ticker": "NFLX",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Byron Donalds",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 8, 2026",
+      "trade_date": "Mar 20, 2026",
+      "excess_return": "-8.93%"
+    },
+    {
+      "ticker": "PYPL",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Byron Donalds",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 8, 2026",
+      "trade_date": "Mar 13, 2026",
+      "excess_return": "3.14%"
+    },
+    {
+      "ticker": "IONQ",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "W. Gregory Steube",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 14, 2026",
+      "trade_date": "Mar 18, 2026",
+      "excess_return": "25.50%"
+    },
+    {
+      "ticker": "TSM",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Cleo Fields",
+      "party": "D",
+      "chamber": "House",
+      "filed_date": "Apr 20, 2026",
+      "trade_date": "Apr 9, 2026",
+      "excess_return": "2.67%"
+    },
+    {
+      "ticker": "MA",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Shelley Moore Capito",
+      "party": "R",
+      "chamber": "Senate",
+      "filed_date": "Apr 12, 2026",
+      "trade_date": "Mar 28, 2026",
+      "excess_return": "-9.87%"
+    },
+    {
+      "ticker": "APD",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Josh Gottheimer",
+      "party": "D",
+      "chamber": "House",
+      "filed_date": "Apr 8, 2026",
+      "trade_date": "Mar 5, 2026",
+      "excess_return": "5.39%"
+    },
+    {
+      "ticker": "ARES",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "John Boozman",
+      "party": "R",
+      "chamber": "Senate",
+      "filed_date": "Apr 14, 2026",
+      "trade_date": "Mar 13, 2026",
+      "excess_return": "3.64%"
+    },
+    {
+      "ticker": "IBIT",
+      "trade_type": "Purchase",
+      "amount": "$100,001 - $250,000",
+      "politician": "Sheri Biggs",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 16, 2026",
+      "trade_date": "Mar 4, 2026",
+      "excess_return": "0.59%"
+    },
+    {
+      "ticker": "LIN",
+      "trade_type": "Purchase",
+      "amount": "$1,001 - $15,000",
+      "politician": "Thomas H. Kean, Jr.",
+      "party": "R",
+      "chamber": "House",
+      "filed_date": "Apr 13, 2026",
+      "trade_date": "Mar 26, 2026",
+      "excess_return": "-6.99%"
+    }
+  ]
+}

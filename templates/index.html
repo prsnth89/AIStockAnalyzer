@@ -1,35 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Stock Analyzer</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stock Analyzer - Smart Investment Research</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-        h1 { color: #2c3e50; }
-        input { font-size: 18px; padding: 10px; width: 200px; border: 2px solid #3498db; border-radius: 4px; }
-        button { font-size: 18px; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #2980b9; }
-        .disclaimer { background: #fff3cd; padding: 15px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #ffc107; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:#0d1117; color:#e6edf3; min-height:100vh; }
+        .header { background:linear-gradient(135deg,#161b22,#1c2431); border-bottom:1px solid #30363d; padding:20px 40px; display:flex; align-items:center; justify-content:space-between; }
+        .header h1 { font-size:24px; color:#58a6ff; }
+        .header h1 span { color:#7ee787; }
+        .search-box { display:flex; gap:10px; }
+        .search-box input { background:#0d1117; border:1px solid #30363d; color:#e6edf3; padding:10px 16px; border-radius:6px; font-size:14px; width:220px; }
+        .search-box button { background:#238636; color:#fff; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:600; }
+        .search-box button:hover { background:#2ea043; }
+        .disclaimer-bar { background:#1c1507; border-bottom:1px solid #4d3800; padding:8px 40px; font-size:12px; color:#d29922; text-align:center; }
+        .container { max-width:1400px; margin:0 auto; padding:30px 20px; }
+        .tabs { display:flex; gap:8px; margin-bottom:25px; background:#161b22; padding:8px; border-radius:10px; border:1px solid #30363d; }
+        .tab { padding:12px 28px; border-radius:8px; cursor:pointer; font-weight:600; font-size:14px; transition:.2s; }
+        .tab:hover { background:#21262d; }
+        .tab.active { background:#238636; color:#fff; }
+        .tab .badge { background:rgba(255,255,255,.2); padding:2px 8px; border-radius:10px; font-size:11px; margin-left:8px; }
+        .category-section { display:none; }
+        .category-section.active { display:block; }
+        .section-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+        .section-header h2 { font-size:22px; }
+        .section-header .cap-badge { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+        .cap-large { background:#1f6feb33; color:#58a6ff; }
+        .cap-mid { background:#a371f733; color:#bc8cff; }
+        .cap-small { background:#f7883333; color:#ffa657; }
+        table { width:100%; border-collapse:collapse; background:#161b22; border-radius:12px; overflow:hidden; border:1px solid #30363d; }
+        th { background:#1c2431; padding:14px 12px; text-align:left; font-size:12px; text-transform:uppercase; color:#8b949e; border-bottom:1px solid #30363d; }
+        td { padding:14px 12px; border-bottom:1px solid #21262d; font-size:13px; }
+        tr:hover td { background:#1c2431; }
+        .ticker-link { color:#58a6ff; font-weight:700; text-decoration:none; cursor:pointer; }
+        .ticker-link:hover { text-decoration:underline; }
+        .company-name { color:#8b949e; font-size:11px; }
+        .score-bar { width:60px; height:8px; background:#21262d; border-radius:4px; overflow:hidden; display:inline-block; vertical-align:middle; margin-right:6px; }
+        .score-fill { height:100%; border-radius:4px; }
+        .rating-badge { padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700; display:inline-block; }
+        .rating-STRONG-BUY { background:#23893633; color:#7ee787; }
+        .rating-BUY { background:#1f6feb33; color:#58a6ff; }
+        .rating-ACCUMULATE { background:#a371f733; color:#bc8cff; }
+        .rating-HOLD { background:#d2992233; color:#e3b341; }
+        .rating-AVOID { background:#f8514933; color:#f85149; }
+        .congress-cell { font-size:11px; }
+        .congress-count { color:#ffa657; font-weight:700; font-size:14px; }
+        .congress-names { color:#8b949e; margin-top:2px; }
+        .congress-amount { color:#7ee787; font-size:11px; }
+        .positive { color:#7ee787; }
+        .negative { color:#f85149; }
+        .stars { color:#e3b341; }
+        .target-cell .price { color:#7ee787; font-weight:600; }
+        .target-cell .pct { color:#8b949e; font-size:11px; }
+        .footer { text-align:center; padding:30px; color:#484f58; font-size:12px; border-top:1px solid #21262d; margin-top:40px; }
+        @media(max-width:900px){ .container{padding:10px;} th,td{padding:8px 6px;font-size:11px;} .header{flex-direction:column;gap:12px;padding:15px;} }
     </style>
 </head>
 <body>
-    <h1>AI Stock Analyzer</h1>
-    <p>Get buy/sell guidance for US stocks (educational research only)</p>
-    
-    <div style="background: #e3f2fd; padding: 15px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #2196f3;">
-        <strong>📊 Day 1 Prototype</strong><br>
-        Currently using demonstration data for: AAPL, MSFT, GOOGL, TSLA, AMZN, NVDA, META, BRK.B, JPM, JNJ<br>
-        <em>Note: Corporate firewall restrictions prevent live Yahoo Finance API access. Demo data shows how the analysis works.</em>
+    <div class="disclaimer-bar">⚠️ For research and education only. Not personalized investment advice. Past performance ≠ future results.</div>
+    <div class="header">
+        <h1>📊 AI Stock <span>Analyzer</span></h1>
+        <form class="search-box" action="/analyze" method="POST">
+            <input type="text" name="ticker" placeholder="Enter ticker (e.g., AAPL)" required>
+            <button type="submit">Analyze</button>
+        </form>
     </div>
-    
-    <form method="POST" action="/analyze">
-        <input type="text" name="ticker" placeholder="Enter ticker (e.g. AAPL)" required>
-        <button type="submit">Analyze</button>
-    </form>
-    
-    <div class="disclaimer">
-        <strong>⚠️ DISCLAIMER:</strong> For research and education only. Not personalized investment advice.
-        Consult a licensed financial advisor before making investment decisions.
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('largecap')">🏛️ Large Cap<span class="badge">&gt;$100B</span></div>
+            <div class="tab" onclick="showTab('midcap')">🏢 Mid Cap<span class="badge">$10-100B</span></div>
+            <div class="tab" onclick="showTab('smallcap')">🚀 Small Cap<span class="badge">&lt;$10B</span></div>
+        </div>
+
+        {% for cat_key, cat_label, cap_class in [('largecap','Large Cap Stocks','cap-large'),('midcap','Mid Cap Stocks','cap-mid'),('smallcap','Small Cap Stocks','cap-small')] %}
+        <div class="category-section {{ 'active' if cat_key == 'largecap' }}" id="section-{{cat_key}}">
+            <div class="section-header">
+                <h2>{{ cat_label }}</h2>
+                <span class="cap-badge {{cap_class}}">Top 10 by Score</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ticker</th>
+                        <th>Price</th>
+                        <th>Score</th>
+                        <th>Rating</th>
+                        <th>P/E</th>
+                        <th>Fwd P/E</th>
+                        <th>Ind P/E</th>
+                        <th>PEG</th>
+                        <th>D/E</th>
+                        <th>Growth</th>
+                        <th>Target</th>
+                        <th>Congress Activity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for stock in categories.get(cat_key, []) %}
+                <tr>
+                    <td>{{ stock.rank }}</td>
+                    <td>
+                        <a class="ticker-link" href="/analyze?ticker={{ stock.ticker }}">{{ stock.ticker }}</a>
+                        <div class="company-name">{{ stock.company }}</div>
+                    </td>
+                    <td>${{ "%.2f"|format(stock.price) }}</td>
+                    <td>
+                        <div class="score-bar"><div class="score-fill" style="width:{{stock.total_score}}%;background:{% if stock.total_score >= 65 %}#7ee787{% elif stock.total_score >= 50 %}#58a6ff{% elif stock.total_score >= 35 %}#e3b341{% else %}#f85149{% endif %};"></div></div>
+                        <strong>{{ stock.total_score }}/100</strong>
+                    </td>
+                    <td><span class="rating-badge rating-{{ stock.rating|replace(' ','-') }}">{{ stock.rating }}</span></td>
+                    <td>{% if stock.pe_ratio %}{{ "%.1f"|format(stock.pe_ratio) }}{% else %}N/A{% endif %}</td>
+                    <td>{% if stock.forward_pe %}{{ "%.1f"|format(stock.forward_pe) }}{% else %}N/A{% endif %}</td>
+                    <td style="color:#8b949e;">{% if stock.industry_pe %}{{ "%.1f"|format(stock.industry_pe) }}{% else %}N/A{% endif %}</td>
+                    <td>{% if stock.peg_ratio %}{{ "%.1f"|format(stock.peg_ratio) }}{% else %}N/A{% endif %}</td>
+                    <td class="{{ 'positive' if (stock.debt_to_equity or 0) < 1 else 'negative' }}">{{ "%.2f"|format(stock.debt_to_equity or 0) }}</td>
+                    <td class="{{ 'positive' if stock.revenue_growth > 0 else 'negative' }}">{{ "%+.1f"|format(stock.revenue_growth) }}%</td>
+                    <td class="target-cell">
+                        <div class="price">${{ "%.0f"|format(stock.target_price) }}</div>
+                        <div class="pct">({{ "%+.1f"|format(stock.target_return) }}%)</div>
+                    </td>
+                    <td class="congress-cell">
+                        {% if stock.congress_politician_count > 0 %}
+                        <div><span class="congress-count">{{ stock.congress_politician_count }}</span> politician{{ 's' if stock.congress_politician_count > 1 }}</div>
+                        <div class="congress-names">
+                            {% for p in stock.congress_politicians[:3] %}
+                            {{ p.name }} <span class="congress-amount">({{ p.amount }})</span>{{ ', ' if not loop.last }}
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <span style="color:#484f58;">No activity</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
     </div>
+
+    <div class="footer">
+        <p>Data Source: Yahoo Finance (mock fallback) | Last Updated: Now | ⚠️ Research only, not financial advice.</p>
+    </div>
+
+    <script>
+    function showTab(cat) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.getElementById('section-' + cat).classList.add('active');
+    }
+    </script>
 </body>
 </html>

@@ -1,261 +1,149 @@
-# AI Stock Analyzer 📊
+# 🏛️ AI Stock Analyzer - Smart Money Congress Tracker
 
-A comprehensive stock analysis tool that provides Warren Buffett-style investment insights with interactive visualizations.
+**Follow the smart money.** Track what U.S. politicians are buying, combine it with deep fundamental analysis, and get **Top 10 stock recommendations** designed to target **30%+ annual returns**.
 
-## Features ✨
-
-- **Real-time Stock Analysis** - Get current price, valuation bands, and buy/sell recommendations
-- **10-Year Financial History** - Analyze 40 quarters and 10 years of financial data
-- **Interactive Charts** - Visualize trends with configurable bar charts and pie charts
-- **Warren Buffett Analysis** - Investment scoring based on value investing principles
-- **Debt Tracking** - Monitor debt levels and growth over time
-- **Geographic & Segment Breakdown** - See revenue distribution with pie charts
-- **Position Sizing Calculator** - Calculate optimal position size based on risk tolerance
-
-## Quick Start 🚀
-
-### Prerequisites
-- Python 3.11 or higher
-- Windows PowerShell
-
-### Installation & Running
-
-1. **Open PowerShell** and navigate to the project directory:
-```powershell
-cd C:\Automation\AIStockAnalyzer
-```
-
-2. **Activate virtual environment** (if not already activated):
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-3. **Install dependencies** (first time only):
-```powershell
-pip install -r requirements.txt
-```
-
-4. **Start the Flask server**:
-```powershell
-cd src
-python app.py
-```
-
-5. **Open your browser** and go to:
-```
-http://127.0.0.1:5000
-```
-
-6. **Enter a stock ticker** (e.g., AAPL, MSFT, GOOGL) and click "Analyze"
-
-## Available Tickers 📈
-
-Currently available for analysis with realistic data:
-- **AAPL** - Apple Inc. (Full 10-year history)
-- **MSFT** - Microsoft Corporation (Limited data)
-- **GOOGL** - Alphabet Inc. (Limited data)
-
-More tickers can be added to the `MOCK_DATA` dictionary in `src/analyzer.py`.
-
-## How to Use 📖
-
-### 1. Search for a Stock
-Enter a ticker symbol (e.g., AAPL) in the search box on the homepage.
-
-### 2. View Analysis Dashboard
-You'll see:
-- **Current price and valuation** - Fair value estimate with buy/sell ranges
-- **Interactive financial trends chart** - Select metrics to display (Revenue, Net Profit, Debt, etc.)
-- **Warren Buffett analysis** - Investment score out of 100 with buy recommendation
-- **Key valuation metrics** - P/E ratio, PEG, Market Cap, Debt/Equity, etc.
-- **Revenue & profitability tables** - 10 years of quarterly and annual data
-
-### 3. Customize the View
-- **Select quarters/years** - Check/uncheck boxes to show specific periods
-- **Configure chart metrics** - Choose which financial metrics to visualize
-- **Toggle chart period** - Switch between quarterly (40 periods) and yearly (10 periods)
-
-### 4. Analyze Geographic & Segment Data
-Scroll down to see:
-- **Worldwide revenue by region** - Bar chart + pie chart
-- **Core income streams** - Business segment breakdown with visualizations
-
-## Dashboard Sections 📊
-
-### 1. Valuation Summary
-- Current price vs fair value
-- Buy/Sell ranges with confidence levels
-- Position sizing recommendations
-
-### 2. Warren Buffett Analysis (🎩)
-- **Score**: 0-100 points based on value investing principles
-- **Verdict**: STRONG BUY / BUY / HOLD / PASS
-- **Confidence**: Very High / High / Moderate / Low
-- **Positive factors**: Consistent profitability, low debt, cash strength
-- **Risk factors**: Overvaluation, high debt, declining margins
-
-### 3. Interactive Financial Trends Chart
-- **Default view**: Yearly data with Revenue, Net Profit, and Debt
-- **Configurable metrics**: Choose from Revenue, Gross Profit, Net Profit, Debt
-- **Period toggle**: Switch between 40 quarters or 10 years
-- **Hover tooltips**: See exact dollar amounts
-
-### 4. Revenue & Profitability Analysis
-**Quarterly Table** (40 quarters - Q2 2016 to Q1 2026):
-- Revenue and growth %
-- Gross profit and margin %
-- Net profit and margin %
-- Debt and growth %
-
-**Yearly Table** (10 years - 2016 to 2025):
-- Same metrics aggregated annually
-- Easy comparison of year-over-year performance
-
-### 5. Geographic & Segment Breakdown
-- **Bar charts**: Horizontal bars showing dollar amounts and percentages
-- **Pie charts**: Visual proportional distribution
-- **Regions**: Americas, Europe, China, Japan, APAC
-- **Segments**: iPhone, Services, Mac, iPad, Wearables
-
-## Technical Details 🔧
-
-### Architecture
-- **Backend**: Flask 3.0.0 (Python web framework)
-- **Data Source**: Mock data (demonstration purposes - Yahoo Finance blocked by firewall)
-- **Frontend**: HTML5, CSS3, JavaScript, Chart.js 4.4.1
-- **Charts**: Chart.js for interactive bar and pie charts
-
-### Project Structure
-```
-AIStockAnalyzer/
-├── src/
-│   ├── app.py              # Flask application (routes)
-│   └── analyzer.py         # Stock analysis logic + mock data
-├── templates/
-│   ├── index.html          # Landing page (ticker search)
-│   ├── result.html         # Analysis dashboard (main view)
-│   └── error.html          # Error handling page
-├── requirements.txt        # Python dependencies
-├── test_analyzer.py        # Testing script
-└── README.md              # This file
-```
-
-### Key Files
-
-**src/app.py**
-- Flask routes: `/` (home), `/analyze` (POST)
-- Error handling and template rendering
-
-**src/analyzer.py**
-- `MOCK_DATA` dictionary: Financial data for tickers
-- `analyze_ticker()`: Main analysis function
-- `calculate_buffett_score()`: Investment scoring algorithm
-- `get_recommendation()`: Buy/sell/hold logic
-
-**templates/result.html**
-- Complete dashboard with all visualizations
-- Chart.js integration for interactive charts
-- Responsive design with mobile support
-
-## Troubleshooting 🔍
-
-### Server won't start
-```powershell
-# Make sure you're in the src directory
-cd src
-python app.py
-```
-
-### Port already in use
-```powershell
-# Kill existing process or use different port
-netstat -ano | findstr :5000
-taskkill /PID <process_id> /F
-```
-
-### Virtual environment issues
-```powershell
-# Deactivate and reactivate
-deactivate
-.\venv\Scripts\Activate.ps1
-```
-
-### Charts not loading
-- Clear browser cache (Ctrl+Shift+Delete)
-- Check browser console for JavaScript errors (F12)
-- Ensure Chart.js CDN is accessible
-
-### "Ticker not found" error
-- Only AAPL, MSFT, GOOGL available in mock data
-- Add more tickers to `MOCK_DATA` in `src/analyzer.py`
-
-## Customization 🎨
-
-### Adding New Tickers
-Edit `src/analyzer.py` and add to `MOCK_DATA`:
-```python
-'TSLA': {
-    'price': 250.00,
-    'pe': 65.5,
-    'quarterly': [...],  # 40 quarters of data
-    'yearly': [...],     # 10 years of data
-    'regions': [...],    # Geographic breakdown
-    'segments': [...]    # Business segments
-}
-```
-
-### Changing Default Chart Metrics
-Edit `templates/result.html`, find the checkboxes and modify `checked` attribute:
-```html
-<input type="checkbox" id="chart-revenue" value="revenue" checked>
-<input type="checkbox" id="chart-net-profit" value="net_profit" checked>
-```
-
-### Adjusting Portfolio Size
-Default is $10,000. Change in the analysis output or modify the calculator logic in `analyzer.py`.
-
-## Data Disclaimer ⚠️
-
-This application uses **demonstration/mock data** for educational purposes only. 
-
-**Why mock data?**
-- Corporate firewall blocks Yahoo Finance API
-- Day 1 prototype focused on functionality demonstration
-- Real data integration planned for future versions
-
-**Not for actual trading decisions!**
-- Data is illustrative, not real-time
-- For research and education only
-- Always consult a licensed financial advisor
-- Past performance ≠ future results
-
-## Future Enhancements 🚀
-
-- [ ] Live data integration (Yahoo Finance, Alpha Vantage, IEX Cloud)
-- [ ] Database storage (PostgreSQL + Redis caching)
-- [ ] User authentication and watchlists
-- [ ] Email/SMS price alerts
-- [ ] Export reports to PDF
-- [ ] Mobile app (React Native)
-- [ ] Broker integration (read-only portfolio)
-- [ ] More technical indicators (RSI, MACD, Bollinger Bands)
-- [ ] News sentiment analysis
-- [ ] Peer comparison (compare multiple stocks)
-
-## Support 💬
-
-For questions or issues:
-1. Check the Troubleshooting section above
-2. Review error messages in terminal and browser console
-3. Verify all dependencies are installed: `pip list`
-4. Ensure Python 3.11+ is being used: `python --version`
-
-## License 📄
-
-Educational project - Not for commercial use or actual trading decisions.
+> 💡 **The Idea**: Members of Congress often trade stocks with an information edge. By tracking their purchases and combining with strong fundamentals, we identify high-conviction opportunities.
 
 ---
 
-**Last Updated**: February 28, 2026  
-**Version**: 0.1 (Day 1 Prototype)  
-**Status**: Demonstration/Educational
+## 🎯 What This App Does
+
+### 📊 Top 10 Recommended Stocks (Homepage)
+Every stock is scored on a **100-point system** combining:
+
+| Signal | Weight | Source |
+|--------|--------|--------|
+| 🏛️ **Congress Trading Activity** | 30 pts | QuiverQuant - recent politician purchases |
+| 📈 **Fundamental Strength** | 30 pts | Revenue growth, margins, low debt (yfinance) |
+| 💰 **Valuation Discount** | 20 pts | P/E vs sector, PEG ratio, price vs fair value |
+| 🔥 **Momentum & Trend** | 20 pts | 50/200-day MA, RSI, recent price action |
+
+### 🏛️ Congress Trading Intelligence
+- **Real-time tracking** of politician stock purchases from SEC filings
+- **Smart filtering**: Focuses on purchases > $15,000 (excludes small dividend reinvestments)
+- **Politician ranking**: Weights trades by historically successful traders (e.g., Pelosi, Gottheimer)
+- **Recency scoring**: Recent trades (< 30 days) score higher than older ones
+
+### 📈 Deep Stock Analysis (Per-Ticker)
+- **10-year financial history**: 40 quarters + 10 years of revenue, profit, debt
+- **Warren Buffett scoring**: Value investing analysis with confidence levels
+- **Interactive charts**: Configurable bar charts + pie charts (Chart.js)
+- **Position sizing**: Risk-based recommendations for portfolio allocation
+- **Geographic & segment breakdown**: Revenue distribution visualization
+
+---
+
+## 🚀 Quick Start
+
+```powershell
+cd C:\Automation\AIStockAnalyzer
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+cd src
+python app.py
+```
+
+Then open **http://127.0.0.1:5000** in your browser.
+
+---
+
+## 📊 How the Scoring Works
+
+### Congress Signal Score (0-30 points)
+| Criteria | Points |
+|----------|--------|
+| Recent politician purchases (< 30 days) | up to 15 |
+| Multiple politicians buying same stock | up to 10 |
+| Large position sizes (> $50K) | up to 5 |
+
+### Fundamental Score (0-30 points)
+| Criteria | Points |
+|----------|--------|
+| Revenue growing > 10% YoY | 10 |
+| Net margin > 15% consistently | 10 |
+| Debt/Equity < 1.0 | 5 |
+| Cash > Debt | 5 |
+
+### Valuation Score (0-20 points)
+| Criteria | Points |
+|----------|--------|
+| P/E below sector average | 8 |
+| PEG ratio < 1.5 | 7 |
+| Price below fair value | 5 |
+
+### Momentum Score (0-20 points)
+| Criteria | Points |
+|----------|--------|
+| Price above 200-day MA | 8 |
+| RSI between 40-65 (not overbought) | 7 |
+| Positive 3-month price change | 5 |
+
+### Score Guide
+| Score | Rating | Action |
+|-------|--------|--------|
+| 80-100 | ⭐⭐⭐⭐⭐ STRONG BUY | High conviction - full position |
+| 65-79 | ⭐⭐⭐⭐ BUY | Good opportunity - build position |
+| 50-64 | ⭐⭐⭐ ACCUMULATE | Start small, add on dips |
+| 35-49 | ⭐⭐ HOLD | Wait for better entry |
+| 0-34 | ⭐ AVOID | Weak signals |
+
+---
+
+## 💰 Targeting 30% Annual Returns
+
+The strategy combines multiple edge factors:
+
+1. **Information Asymmetry**: Politicians often trade before public knowledge of legislation
+2. **Fundamental Quality**: Only recommends stocks with strong financials
+3. **Valuation Discipline**: Avoids overpaying (Buffett-style margin of safety)
+4. **Trend Confirmation**: Ensures stocks are in uptrends before entry
+
+### Risk Management
+- **Position sizing**: Never > 10% of portfolio in one stock
+- **Stop losses**: Suggested exit points on every recommendation
+- **Diversification**: Top 10 spans multiple sectors
+- **Rebalancing**: Refreshes when new congress trades are detected
+
+---
+
+## 🏛️ Data Sources
+
+| Source | Data | Access |
+|--------|------|--------|
+| [QuiverQuant](https://www.quiverquant.com/congresstrading) | Congress stock trades | Web scraping |
+| [Capitol Trades](https://www.capitoltrades.com) | Politician trading activity | Reference |
+| [Yahoo Finance](https://finance.yahoo.com) | Stock prices, fundamentals | yfinance (free) |
+| [Unusual Whales](https://unusualwhales.com) | Options flow (future) | Premium API |
+
+---
+
+## 📱 Features
+
+| Feature | Status |
+|---------|--------|
+| ✅ Top 10 stock recommendations with scores | Live |
+| ✅ Congress trading tracker | Live |
+| ✅ Real-time stock data (yfinance) | Live |
+| ✅ Warren Buffett analysis | Live |
+| ✅ Interactive financial charts (Chart.js) | Live |
+| ✅ 10-year quarterly/annual financials | Live |
+| ✅ Geographic & segment pie charts | Live |
+| ✅ Position sizing calculator | Live |
+| ✅ Politician trade history per stock | Live |
+| 🔄 Unusual Whales options flow | Planned |
+| 🔄 Email/SMS price alerts | Planned |
+| 🔄 Portfolio tracking | Planned |
+
+---
+
+## ⚠️ Disclaimer
+
+**For research and educational purposes only.** NOT personalized financial advice.
+Past performance ≠ future results. Congress trading data has a reporting lag (up to 45 days).
+Always consult a licensed financial advisor. All investments carry risk of loss.
+
+---
+
+📖 **Technical docs**: See [TECHNICAL.md](TECHNICAL.md)
+
+**Version**: 2.0 | **Updated**: April 29, 2026

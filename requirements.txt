@@ -1,4 +1,6 @@
 flask==3.0.0
-yfinance==0.2.35
+yfinance==0.2.51
 pandas==2.1.4
 requests==2.31.0
+beautifulsoup4==4.12.3
+lxml
